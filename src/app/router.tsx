@@ -3,6 +3,7 @@ import { createBrowserRouter, Navigate, RouterProvider, Outlet } from 'react-rou
 import { FloatingCartButton } from '@/shared/components/FloatingCartButton';
 import { useAuthStore } from '@/features/auth/store';
 import { BottomNav } from '@/shared/components/BottomNav';
+import { ProtectedRoute } from '@/shared/components/ProtectedRoute';
 
 // ─── Route-level Code Splitting ──────────────────────────────────────────────
 // Auth
@@ -57,6 +58,15 @@ function MainLayout() {
       <BottomNav />
     </Suspense>
   );
+}
+// Layout wrapper for transaction screens
+
+function CleanLayout() {
+  return(
+    <Suspense fallback={<RouteLoader/>}>
+      <Outlet/>
+    </Suspense>
+  )
 }
 
 // ─── Router Configuration ────────────────────────────────────────────────────
@@ -119,37 +129,53 @@ export const router = createBrowserRouter([
         path: '/cart',
         element: <CartScreen />,
       },
-      {
-        path: '/checkout',
-        element: <CheckoutScreen />,
-      },
-      {
-        path: '/payment',
-        element: <PaymentScreen />,
-      },
-      {
-        path: '/order-success',
-        element: <OrderSuccessScreen />,
-      },
-      {
-        path: '/track/:orderId',
-        element: <OrderTrackingScreen />,
-      },
-      // Added Profile & Orders routes
-      {
-        path: '/profile',
-        element: <ProfileScreen />,
-      },
-      {
-        path: '/orders',
-        element: <OrderHistoryScreen />,
-      },
       { path: '/location', element: <LocationScreen /> },
     ],
   },
   {
+    element: <ProtectedRoute />,
+    children: [
+      {
+        element: <CleanLayout />,
+        children:[
+          {
+            path: '/checkout',
+            element: <CheckoutScreen />,
+          },
+          {
+            path: '/payment',
+            element: <PaymentScreen />,
+          },
+          {
+            path: '/order-success',
+            element: <OrderSuccessScreen />,
+          },
+          {
+            path: '/track/:orderId',
+            element: <OrderTrackingScreen />,
+          },
+        ]
+      },
+      {
+        element: <MainLayout />,
+        children:[
+        // Added Profile & Orders routes
+          {
+            path: '/profile',
+            element: <ProfileScreen />,
+          },
+          {
+            path: '/orders',
+            element: <OrderHistoryScreen />,
+          },
+        ]
+      }
+
+    ]
+  },
+  {
     path: '*',
-    element: <Navigate to="/home" replace />,
+    element: <Navigate to="/" replace />,
   },
 ]);
 
