@@ -43,3 +43,8 @@ input, textarea {
 .animate-slide-up {
   animation: slide-up 0.3s ease-out;
 }
+
+/* Support momentum physics on Webkit webviews */
+.overflow-y-auto {
+  -webkit-overflow-scrolling: touch !important;
+}

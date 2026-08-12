@@ -1,6 +1,5 @@
 import { useState, useCallback } from 'react';
 import { SearchBar } from '@/shared/components/SearchBar';
-import { BottomNav } from '@/shared/components/BottomNav';
 import { BannerCarousel } from '../components/BannerCarousel';
 import { CategoryGrid } from '../components/CategoryGrid';
 import { PopularItems } from '../components/PopularItems';
@@ -75,9 +74,6 @@ export function HomeScreen() {
           </div>
         )}
       </div>
-
-      {/* Bottom Navigation */}
-      <BottomNav />
     </div>
   );
 }

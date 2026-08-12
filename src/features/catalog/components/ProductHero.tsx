@@ -8,7 +8,7 @@ interface ProductHeroProps {
   tags?: string[];
 }
 
-export function ProductHero({ name, rating, reviewCount, tags }: ProductHeroProps) {
+export function ProductHero({rating, reviewCount, tags }: ProductHeroProps) {
   const navigate = useNavigate();
 
   return (

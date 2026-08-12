@@ -70,7 +70,7 @@ export function CartItemCard({ item, onUpdateQuantity, onRemove }: CartItemCardP
           </p>
           {item.specialInstructions && (
             <p className="text-xs text-gray-400 mt-0.5 truncate italic">
-              "{item.specialInstructions}"
+              "{Array.isArray(item.specialInstructions) ? item.specialInstructions.join(', ') : item.specialInstructions}"
             </p>
           )}
 

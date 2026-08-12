@@ -1,1 +1,1 @@
-export { default as OrderTrackingScreen } from './OrderTrackingScreen';
+export { OrderTrackingScreen } from './OrderTrackingScreen';

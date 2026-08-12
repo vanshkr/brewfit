@@ -2,6 +2,7 @@ export interface CartItemAddon {
   id: string;
   name: string;
   price: number;
+  calories?: number;
 }
 
 export interface SizeOption {
@@ -22,7 +23,7 @@ export interface CartItem {
   unitPrice: number;            // (Size price + Addons sum)
   totalPrice: number;           // (unitPrice * quantity)
   addOns: CartItemAddon[];      // Consistent camelCase
-  specialInstructions?: string;
+  specialInstructions?: string[];
 }
 
 export interface PromoCode {

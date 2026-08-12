@@ -18,14 +18,14 @@ export const useReorder = () => {
           image: item.image,
           size: item.size,
           quantity: item.quantity,
-          basePrice: item.price,
+          unitPrice: item.price,
           totalPrice: item.price * item.quantity,
           addOns: item.addOns.map((name, idx) => ({
             id: `addon-${idx}`,
             name,
             price: 0, // Price included in base
           })),
-          customizations: item.customizations,
+          specialInstructions: item.customizations || (item as any).specialInstructions || (item as any).instructions,
         });
       });
 
@@ -44,14 +44,14 @@ export const useReorder = () => {
         image: item.image,
         size: item.size,
         quantity: item.quantity,
-        basePrice: item.price,
+        unitPrice: item.price,
         totalPrice: item.price * item.quantity,
         addOns: item.addOns.map((name, idx) => ({
           id: `addon-${idx}`,
           name,
           price: 0,
         })),
-        customizations: item.customizations,
+        specialInstructions: item.customizations || (item as any).specialInstructions || (item as any).instructions,
       });
 
       navigate('/cart');

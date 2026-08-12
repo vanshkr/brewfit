@@ -1,7 +1,6 @@
 import { useState, useMemo, useCallback } from 'react';
 import { useParams } from 'react-router';
 import { NutritionBadge } from '@/shared/components/NutritionBadge';
-import { FloatingCartButton } from '@/shared/components/FloatingCartButton';
 import { Skeleton } from '@/shared/components/Skeleton';
 import { useProduct } from '../hooks/useProduct';
 import { useCartStore } from '@/features/cart/store';
@@ -152,9 +151,6 @@ export function ProductDetailScreen() {
           <span className="text-sm font-bold">₹{totalPrice}</span>
         </button>
       </div>
-
-      {/* Floating Cart (hidden on this page since we have Add to Cart) */}
-      <FloatingCartButton />
     </div>
   );
 }

@@ -102,7 +102,7 @@ export const ProfileScreen = memo(function ProfileScreen() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-24">
+    <div className="min-h-screen bg-gray-50 pb-24 overflow-y-auto flex-1 h-full w-full" style={{ WebkitOverflowScrolling: 'touch' }}>
       {/* Top bar */}
       <div className="sticky top-0 z-10 bg-white/80 backdrop-blur-md border-b border-gray-100">
         <div className="flex items-center justify-between px-4 py-3">

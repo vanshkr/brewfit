@@ -1,8 +1,6 @@
 import { useState, useMemo } from 'react';
 import { useParams } from 'react-router';
 import { SearchBar } from '@/shared/components/SearchBar';
-import { FloatingCartButton } from '@/shared/components/FloatingCartButton';
-import { BottomNav } from '@/shared/components/BottomNav';
 import { CategoryPill } from '@/shared/components/CategoryPill';
 import { CategoryHeader } from '../components/CategoryHeader';
 import { SortFilter } from '../components/SortFilter';
@@ -98,12 +96,6 @@ export function CategoryListingScreen() {
           viewMode={viewMode}
         />
       </div>
-
-      {/* Floating Cart */}
-      <FloatingCartButton />
-
-      {/* Bottom Navigation */}
-      <BottomNav />
     </div>
   );
 }

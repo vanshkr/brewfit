@@ -53,7 +53,7 @@ export const BottomNav = memo(function BottomNav() {
   );
 
   // Hide on certain routes
-  const hiddenRoutes = ['/login', '/otp', '/onboarding', '/splash', '/checkout', '/payment'];
+  const hiddenRoutes = ['/login', '/otp', '/onboarding', '/splash', '/checkout', '/payment', '/cart'];
   const shouldHide = hiddenRoutes.some((r) => location.pathname.startsWith(r));
 
   if (shouldHide) return null;

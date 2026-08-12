@@ -32,6 +32,7 @@ export const useProfileStore = create<ProfileState>()(
             profile: {
               ...state.profile,
               ...data,
+              gender: data.gender ? (data.gender as UserProfile['gender']) : state.profile.gender,
             },
             isEditing: false,
           };

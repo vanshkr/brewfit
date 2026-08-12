@@ -1,5 +1,4 @@
 import { MessageSquare, ToggleLeft, ToggleRight } from 'lucide-react';
-import { cn } from '@/shared/utils/cn';
 
 interface DeliveryInstructionsProps {
   instructions: string;

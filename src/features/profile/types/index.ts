@@ -2,6 +2,8 @@
 // Profile & Order History Types
 // ============================================================
 
+export type Gender = 'male' | 'female' | 'other' | 'prefer-not-to-say';
+
 export interface UserProfile {
   id: string;
   name: string;
@@ -9,7 +11,7 @@ export interface UserProfile {
   phone: string;
   avatar?: string;
   dateOfBirth?: string;
-  gender?: 'male' | 'female' | 'other' | 'prefer-not-to-say';
+  gender?: Gender;
   createdAt: string;
   preferences: UserPreferences;
   stats: UserStats;
@@ -107,5 +109,5 @@ export interface EditProfileForm {
   email: string;
   phone: string;
   dateOfBirth: string;
-  gender: string;
+  gender: Gender;
 }

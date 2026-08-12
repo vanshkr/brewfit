@@ -1,15 +1,21 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShoppingBag } from 'lucide-react';
-import { useNavigate } from 'react-router'; // ✅ FIXED: Changed react-router-dom to react-router
+import { useNavigate, useLocation } from 'react-router'; // ✅ FIXED: Changed react-router-dom to react-router
 import { useCartStore } from '@/features/cart/store';
 
 export function FloatingCartButton() {
   const navigate = useNavigate();
+  const location = useLocation();
   const getItemCount = useCartStore((s) => s.getItemCount);
   const getSummary = useCartStore((s) => s.getSummary);
 
   const count = getItemCount();
   const summary = getSummary();
+
+  const hiddenRoutes = ['/cart', '/checkout', '/payment', '/product'];
+  const shouldHide = hiddenRoutes.some((route) => location.pathname.startsWith(route));
+
+  if (shouldHide) return null;
 
   return (
     <AnimatePresence>

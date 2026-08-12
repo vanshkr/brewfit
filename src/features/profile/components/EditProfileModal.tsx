@@ -15,7 +15,7 @@ export const EditProfileModal = memo(function EditProfileModal() {
     email: '',
     phone: '',
     dateOfBirth: '',
-    gender: '',
+    gender: 'prefer-not-to-say',
   });
 
   const [errors, setErrors] = useState<Partial<Record<keyof EditProfileForm, string>>>({});
@@ -27,7 +27,7 @@ export const EditProfileModal = memo(function EditProfileModal() {
         email: profile.email,
         phone: profile.phone,
         dateOfBirth: profile.dateOfBirth || '',
-        gender: profile.gender || '',
+        gender: profile.gender || 'prefer-not-to-say',
       });
       setErrors({});
     }
@@ -54,7 +54,7 @@ export const EditProfileModal = memo(function EditProfileModal() {
   }, [form, validate, updateMutation]);
 
   const handleChange = useCallback((field: keyof EditProfileForm, value: string) => {
-    setForm((prev) => ({ ...prev, [field]: value }));
+    setForm((prev) => ({ ...prev, [field]: value as any }));
     setErrors((prev) => ({ ...prev, [field]: undefined }));
   }, []);
 
@@ -170,7 +170,7 @@ export const EditProfileModal = memo(function EditProfileModal() {
                 'border-gray-200'
               )}
             >
-              <option value="">Prefer not to say</option>
+              <option value="prefer-not-to-say">Prefer not to say</option>
               <option value="male">Male</option>
               <option value="female">Female</option>
               <option value="other">Other</option>
