@@ -1,0 +1,45 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-primary: oklch(0.55 0.18 145);
+  --color-primary-light: oklch(0.92 0.05 145);
+  --color-primary-dark: oklch(0.4 0.15 145);
+  --color-secondary: oklch(0.3 0.02 80);
+  --color-surface: oklch(0.98 0.005 90);
+  --color-muted: oklch(0.7 0.01 80);
+  --font-sans: 'Inter', sans-serif;
+}
+
+body{
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+input, textarea {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+#root {
+  display: flex;
+  justify-content: center;
+  background-color: var(--color-surface);
+}
+
+/* Slide up animation for modals */
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.3s ease-out;
+}
