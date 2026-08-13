@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -19,23 +18,24 @@ const loginSchema = z.object({
 type LoginForm = z.infer<typeof loginSchema>;
 
 export function LoginScreen() {
-  const [phone, setPhone] = useState('');
   const sendOtp = useSendOtp();
 
   const {
     handleSubmit,
     setValue,
+    watch,
     formState: { errors },
-    trigger,
   } = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
     defaultValues: { phone: '' },
   });
 
+  // Watch phone value directly from React Hook Form (Single Source of Truth)
+  const phone = watch('phone');
+
   const handlePhoneChange = (value: string) => {
-    setPhone(value);
-    setValue('phone', value);
-    if (errors.phone) trigger('phone');
+    // Update form state and trigger validation cleanly
+    setValue('phone', value, { shouldValidate: true });
   };
 
   const onSubmit = (data: LoginForm) => {

@@ -1,13 +1,16 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { motion } from 'framer-motion';
-import { useAuthStore } from '../store/';
+import { useAuthStore } from '../store';
 
 export function SplashScreen() {
   const navigate = useNavigate();
-  const { isAuthenticated, hasSeenOnboarding } = useAuthStore();
+  const { isAuthenticated, hasSeenOnboarding, hasHydrated } = useAuthStore();
 
   useEffect(() => {
+    // ✋ Don't make routing decisions until Zustand has finished reading LocalStorage
+    if (!hasHydrated) return;
+
     const timer = setTimeout(() => {
       if (isAuthenticated) {
         navigate('/home', { replace: true });
@@ -19,7 +22,7 @@ export function SplashScreen() {
     }, 2200);
 
     return () => clearTimeout(timer);
-  }, [isAuthenticated, hasSeenOnboarding, navigate]);
+  }, [hasHydrated, isAuthenticated, hasSeenOnboarding, navigate]);
 
   return (
     <div className="flex h-full flex-col items-center justify-center bg-primary">

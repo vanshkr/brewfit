@@ -1,20 +1,18 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 
-export function useCountdown(initialSeconds: number) {
+export function useCountdown(initialSeconds: number = 30) {
   const [seconds, setSeconds] = useState(initialSeconds);
   const [isRunning, setIsRunning] = useState(true);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
-    if (!isRunning || seconds <= 0) {
-      setIsRunning(false);
-      return;
-    }
+    // Stop if not running
+    if (!isRunning) return;
 
     intervalRef.current = setInterval(() => {
       setSeconds((prev) => {
         if (prev <= 1) {
-          setIsRunning(false);
+          setIsRunning(false); // Stop countdown when reaching 0
           return 0;
         }
         return prev - 1;
@@ -24,14 +22,23 @@ export function useCountdown(initialSeconds: number) {
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  }, [isRunning, seconds]);
+  }, [isRunning]); // 👈 Only depend on isRunning!
 
   const restart = useCallback(() => {
+    if (intervalRef.current) clearInterval(intervalRef.current);
     setSeconds(initialSeconds);
     setIsRunning(true);
   }, [initialSeconds]);
 
-  const formatted = `${String(Math.floor(seconds / 60)).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;
+  const formatted = `${String(Math.floor(seconds / 60)).padStart(2, '0')}:${String(
+    seconds % 60
+  ).padStart(2, '0')}`;
 
-  return { seconds, formatted, isRunning, isComplete: seconds === 0, restart };
+  return {
+    seconds,
+    formatted,
+    isRunning,
+    isComplete: seconds === 0,
+    restart,
+  };
 }

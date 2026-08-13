@@ -9,6 +9,7 @@ interface AuthState {
   phone: string | null;
   isAuthenticated: boolean;
   hasSeenOnboarding: boolean;
+  hasHydrated: boolean; // 👈 Tracks localStorage hydration state
 
   // Actions
   setPhone: (phone: string) => void;
@@ -16,6 +17,7 @@ interface AuthState {
   setUser: (user: User) => void;
   completeOnboarding: () => void;
   logout: () => void;
+  setHasHydrated: (state: boolean) => void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -27,6 +29,7 @@ export const useAuthStore = create<AuthState>()(
       phone: null,
       isAuthenticated: false,
       hasSeenOnboarding: false,
+      hasHydrated: false,
 
       setPhone: (phone) => set({ phone }),
 
@@ -36,6 +39,8 @@ export const useAuthStore = create<AuthState>()(
       setUser: (user) => set({ user }),
 
       completeOnboarding: () => set({ hasSeenOnboarding: true }),
+
+      setHasHydrated: (hasHydrated) => set({ hasHydrated }),
 
       logout: () =>
         set({
@@ -48,10 +53,15 @@ export const useAuthStore = create<AuthState>()(
     }),
     {
       name: 'brewfit-auth',
+      onRehydrateStorage: () => (state) => {
+        // 👈 Flips flag to true as soon as storage reads complete
+        state?.setHasHydrated(true);
+      },
       partialize: (state) => ({
         accessToken: state.accessToken,
         refreshToken: state.refreshToken,
         user: state.user,
+        phone: state.phone, // 👈 Persisted phone so /otp survives reloads
         isAuthenticated: state.isAuthenticated,
         hasSeenOnboarding: state.hasSeenOnboarding,
       }),

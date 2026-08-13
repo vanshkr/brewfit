@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { motion } from 'framer-motion';
 import { Button } from '@/shared/components/Button';
@@ -17,13 +17,33 @@ export function OtpVerifyScreen() {
   const resendOtp = useSendOtp();
   const countdown = useCountdown(OTP_RESEND_SECONDS);
 
-  // If no phone stored, redirect back
-  if (!phone) {
-    navigate('/login', { replace: true });
-    return null;
-  }
+  // 1. SAFELY HANDLE MISSING PHONE
+  useEffect(() => {
+    if (!phone) {
+      navigate('/login', { replace: true });
+    }
+  }, [phone, navigate]);
+
+  // 2. SAFE AUTO-SUBMIT (Only fires when digits are fresh and no error)
+  useEffect(() => {
+    if (
+      otp.length === OTP_LENGTH &&
+      phone &&
+      !verifyOtp.isPending &&
+      !verifyOtp.isError
+    ) {
+      verifyOtp.mutate({ phone, countryCode: '+91', otp });
+    }
+  }, [otp, phone, verifyOtp.isPending, verifyOtp.isError]);
+
+  if (!phone) return null;
 
   const maskedPhone = `+91 ${phone.slice(0, 2)}****${phone.slice(-2)}`;
+
+  const handleOtpChange = (value: string) => {
+    if (verifyOtp.isError) verifyOtp.reset(); // Resets error flag so user can re-submit
+    setOtp(value);
+  };
 
   const handleVerify = () => {
     if (otp.length !== OTP_LENGTH) return;
@@ -33,6 +53,7 @@ export function OtpVerifyScreen() {
   const handleResend = () => {
     if (!countdown.isComplete) return;
     setOtp('');
+    verifyOtp.reset();
     countdown.restart();
     resendOtp.mutate({ phone, countryCode: '+91' });
   };
@@ -64,7 +85,7 @@ export function OtpVerifyScreen() {
       <div className="space-y-4">
         <OtpInput
           value={otp}
-          onChange={setOtp}
+          onChange={handleOtpChange}
           error={verifyOtp.isError}
           disabled={verifyOtp.isPending}
         />
@@ -77,7 +98,7 @@ export function OtpVerifyScreen() {
             className="text-center text-sm text-red-500"
             role="alert"
           >
-            {verifyOtp.error.message || 'Invalid OTP. Please try again.'}
+            {verifyOtp.error?.message || 'Invalid OTP. Please try again.'}
           </motion.p>
         )}
       </div>

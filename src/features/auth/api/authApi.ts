@@ -7,17 +7,16 @@ const DEV_OTP = import.meta.env.VITE_DEV_OTP;
 
 // Helper delay to simulate real network latency
 const mockDelay = (ms = 500) => new Promise((resolve) => setTimeout(resolve, ms));
-const sanitizePhone = (phone: string): string => phone.replace(/\D/g, '');
+const sanitizePhone = (phone: unknown): string => String(phone || '').replace(/\D/g, '');
 
 export const authApi = {
   sendOtp: async (payload: SendOtpPayload): Promise<{ success: boolean }> => {
     // Sanitize input phone number
     const cleanPhone = sanitizePhone(payload.phone);
 
-    // ALWAYS bypass backend in DEV mode if phone is in dev list OR if backend is offline
+    // ALWAYS bypass backend in DEV mode if phone matches DEV_PHONE
     if (import.meta.env.DEV) {
-      await mockDelay(600); // Simulate network wait
-      // Check if phone number is allowed in dev mode
+      await mockDelay(600);
 
       if (cleanPhone !== DEV_PHONE) {
         throw new Error(`[DEV] ${cleanPhone} is not a registered dev phone number in .env!`);
@@ -28,7 +27,10 @@ export const authApi = {
     }
 
     // Only attempts real HTTP post in production builds
-    const { data } = await api.post('/auth/send-otp', payload);
+    const { data } = await api.post('/auth/send-otp', {
+      ...payload,
+      phone: cleanPhone,
+    });
     return data;
   },
 
@@ -42,7 +44,7 @@ export const authApi = {
       if (cleanPhone !== DEV_PHONE) {
         throw new Error('[DEV] Phone number mismatch!');
       }
-      if (payload.otp !== DEV_OTP) {
+      if (String(payload.otp) !== String(DEV_OTP)) {
         throw new Error(`[DEV] Invalid OTP!`);
       }
 
@@ -64,9 +66,13 @@ export const authApi = {
       };
     }
 
-    const { data } = await api.post('/auth/verify-otp', payload);
+    const { data } = await api.post('/auth/verify-otp', {
+      ...payload,
+      phone: cleanPhone,
+    });
     return data;
   },
+
   getProfile: async (): Promise<User> => {
     const { data } = await api.get('/auth/me');
     return data;
