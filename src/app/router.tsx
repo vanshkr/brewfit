@@ -10,7 +10,7 @@ import { ProtectedRoute } from '@/shared/components/ProtectedRoute';
 const SplashScreen = lazy(() => import('@/features/auth/screens/SplashScreen').then(m => ({ default: m.SplashScreen })));
 const OnboardingScreen = lazy(() => import('@/features/auth/screens/OnboardingScreen').then(m => ({ default: m.OnboardingScreen })));
 const LoginScreen = lazy(() => import('@/features/auth/screens/LoginScreen').then(m => ({ default: m.LoginScreen })));
-const OtpScreen = lazy(() => import('@/features/auth/screens/OtpVerifyScreen').then(m => ({ default: m.OtpVerifyScreen })));
+const OtpVerifyScreen = lazy(() => import('@/features/auth/screens/OtpVerifyScreen').then(m => ({ default: m.OtpVerifyScreen })));
 
 // Catalog & Home
 const HomeScreen = lazy(() => import('@/features/home/screens/HomeScreen').then(m => ({ default: m.HomeScreen })));
@@ -101,10 +101,10 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: '/otp',
+    path: '/verify-otp',
     element: (
       <SuspenseWrapper>
-        <OtpScreen />
+        <OtpVerifyScreen />
       </SuspenseWrapper>
     ),
   },

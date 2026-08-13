@@ -2,13 +2,13 @@ import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
 import { authApi } from '../api/authApi';
 import { useAuthStore } from '../store';
-
+import { SendOtpPayload, VerifyOtpPayload } from '@/shared/types';
 export function useSendOtp() {
   const setPhone = useAuthStore((s) => s.setPhone);
   const navigate = useNavigate();
 
   return useMutation({
-    mutationFn: authApi.sendOtp,
+    mutationFn: (payload: SendOtpPayload) => authApi.sendOtp(payload),
     onSuccess: (_, variables) => {
       setPhone(variables.phone);
       navigate('/verify-otp');
@@ -21,7 +21,7 @@ export function useVerifyOtp() {
   const navigate = useNavigate();
 
   return useMutation({
-    mutationFn: authApi.verifyOtp,
+    mutationFn: (payload: VerifyOtpPayload) => authApi.verifyOtp(payload),
     onSuccess: (data) => {
       setTokens(data.tokens.accessToken, data.tokens.refreshToken);
       setUser(data.user);
