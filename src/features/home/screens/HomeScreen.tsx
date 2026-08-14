@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { SearchBar } from '@/shared/components/SearchBar';
 import { BannerCarousel } from '../components/BannerCarousel';
 import { CategoryGrid } from '../components/CategoryGrid';
@@ -11,47 +11,60 @@ import { mockBanners } from '@/mocks';
 
 export function HomeScreen() {
   const [searchQuery, setSearchQuery] = useState('');
+  const [debouncedQuery, setDebouncedQuery] = useState('');
+
+  // Debounce search query by 300ms to prevent network/query thrashing (Rule 5.7)
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedQuery(searchQuery);
+    }, 300);
+    return () => clearTimeout(handler);
+  }, [searchQuery]);
 
   const { data: categories = [], isLoading: categoriesLoading } = useCategories();
   const { data: popularProducts = [], isLoading: productsLoading } = useProducts({
     popular: true,
   });
   const { data: searchResults = [], isLoading: searchLoading } = useProducts({
-    search: searchQuery,
+    search: debouncedQuery,
   });
 
-  const handleSearch = useCallback((query: string) => {
-    setSearchQuery(query);
-  }, []);
-
-  const isSearching = searchQuery.length > 0;
+  const isSearching = searchQuery.trim().length > 0;
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-28 flex-1 overflow-y-auto w-full p-4"       
-      style={{ WebkitOverflowScrolling: 'touch' }}>
-      <div className="w-full px-4 pt-[env(safe-area-inset-top)]">
+    <div
+      className="flex-1 min-h-screen w-full overflow-y-auto bg-gray-50 pb-28"
+      style={{ WebkitOverflowScrolling: 'touch' }}
+    >
+      <div className="w-full px-4 pt-[calc(env(safe-area-inset-top)+1rem)">
         {/* Header */}
-        <div className="pt-4 pb-3">
+        <div className="pb-3">
           <HomeHeader />
         </div>
 
         {/* Search */}
         <div className="pb-4">
-          <SearchBar onSearch={handleSearch} />
+          <SearchBar onSearch={setSearchQuery} />
         </div>
 
-        {/* Search Results Mode */}
+        {/* Search Results Mode vs Default Catalog Sections */}
         {isSearching ? (
           <div className="space-y-3">
             <SectionHeader title={`Results for "${searchQuery}"`} />
-            <PopularItems products={searchResults} isLoading={searchLoading} />
+            {!searchLoading && searchResults.length === 0 ? (
+              <div className="py-12 text-center text-sm text-gray-500">
+                No items found matching "{searchQuery}"
+              </div>
+            ) : (
+              <PopularItems products={searchResults} isLoading={searchLoading} />
+            )}
           </div>
         ) : (
           <div className="space-y-6">
-            {/* Banners */}
+            {/* Promotional Banners */}
             <BannerCarousel banners={mockBanners} />
 
-            {/* Categories */}
+            {/* Category Grid */}
             <div className="space-y-3">
               <SectionHeader title="Categories" />
               <CategoryGrid
