@@ -26,16 +26,16 @@ export function CategoryGrid({ categories, isLoading }: CategoryGridProps) {
         <button
           key={category.id}
           onClick={() => navigate(`/category/${category.id}`)}
-          className="flex flex-col items-center gap-1.5 p-3 bg-white rounded-2xl border border-gray-100 hover:shadow-md hover:border-green-200 transition-all active:scale-95"
+          className="flex flex-col items-center gap-1.5 p-3 bg-white rounded-2xl border border-gray-100 hover:shadow-md hover:border-green-200 transition-all active:scale-95 text-center"
         >
           <span className="text-2xl" aria-hidden="true">
             {category.icon}
           </span>
-          <span className="text-xs font-medium text-gray-700 text-center leading-tight">
+          <span className="text-xs font-medium text-gray-700 leading-tight">
             {category.name}
           </span>
           <span className="text-[10px] text-gray-400">
-            {category.productCount} items
+            {category.productCount} {category.productCount === 1 ? 'item' : 'items'}
           </span>
         </button>
       ))}

@@ -33,7 +33,7 @@ export function HomeScreen() {
 
   return (
     <div
-      className="flex-1 min-h-screen w-full overflow-y-auto bg-gray-50 pb-28"
+      className="flex-1 min-h-screen w-full overflow-y-auto bg-gray-50 pb-20"
       style={{ WebkitOverflowScrolling: 'touch' }}
     >
       <div className="w-full px-4 pt-[calc(env(safe-area-inset-top)+1rem)">

@@ -15,6 +15,7 @@ export function SectionHeader({ title, actionLabel = 'See All', actionPath }: Se
       {actionPath && (
         <button
           onClick={() => navigate(actionPath)}
+          aria-label={`${actionLabel} for ${title}`}
           className="text-xs font-semibold text-green-600 hover:text-green-700 transition-colors"
         >
           {actionLabel} →

@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import { cn } from '@/shared/utils/cn';
 
 interface SearchBarProps {
@@ -14,19 +14,16 @@ export function SearchBar({
 }: SearchBarProps) {
   const [value, setValue] = useState('');
 
-  const handleChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const query = e.target.value;
-      setValue(query);
-      onSearch(query);
-    },
-    [onSearch]
-  );
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const query = e.target.value;
+    setValue(query);
+    onSearch(query);
+  };
 
-  const handleClear = useCallback(() => {
+  const handleClear = () => {
     setValue('');
     onSearch('');
-  }, [onSearch]);
+  };
 
   return (
     <div className={cn('relative', className)}>
@@ -43,8 +40,9 @@ export function SearchBar({
       />
       {value && (
         <button
+          type="button"
           onClick={handleClear}
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-sm"
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-sm p-1"
           aria-label="Clear search"
         >
           ✕

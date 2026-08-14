@@ -10,7 +10,7 @@ interface ProductCardProps {
 
 export function ProductCard({ product, variant = 'grid', className }: ProductCardProps) {
   const navigate = useNavigate();
-  const basePrice = product.sizes[0]?.price ?? 0;
+  const basePrice = product.sizes?.[0]?.price ?? 0;
 
   const handleClick = () => {
     navigate(`/product/${product.id}`);
@@ -25,10 +25,8 @@ export function ProductCard({ product, variant = 'grid', className }: ProductCar
           className
         )}
       >
-        <div className="w-16 h-16 rounded-xl bg-gray-100 flex-shrink-0 overflow-hidden">
-          <div className="w-full h-full flex items-center justify-center text-2xl bg-green-50">
-            ☕
-          </div>
+        <div className="w-16 h-16 rounded-xl bg-green-50 shrink-0 flex items-center justify-center text-2xl">
+          ☕
         </div>
         <div className="flex-1 min-w-0">
           <h3 className="text-sm font-semibold text-gray-800 truncate">
@@ -39,10 +37,8 @@ export function ProductCard({ product, variant = 'grid', className }: ProductCar
           </p>
           <p className="text-sm font-bold text-green-600 mt-1">₹{basePrice}</p>
         </div>
-        <div className="flex-shrink-0">
-          <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-600 text-white text-lg font-bold">
-            +
-          </span>
+        <div className="shrink-0 text-gray-400 text-sm font-bold pr-1">
+          →
         </div>
       </button>
     );
@@ -68,18 +64,18 @@ export function ProductCard({ product, variant = 'grid', className }: ProductCar
           <span className="text-[10px] font-semibold">{product.rating}</span>
         </div>
       </div>
-      <div className="p-3 flex-1 flex flex-col">
-        <h3 className="text-sm font-semibold text-gray-800 line-clamp-1">
-          {product.name}
-        </h3>
-        <p className="text-[11px] text-gray-500 mt-0.5">
-          {product.nutrition.calories} kcal • {product.nutrition.protein}g protein
-        </p>
-        <div className="flex items-center justify-between mt-2">
+      <div className="p-3 flex-1 flex flex-col justify-between">
+        <div>
+          <h3 className="text-sm font-semibold text-gray-800 line-clamp-1">
+            {product.name}
+          </h3>
+          <p className="text-[11px] text-gray-500 mt-0.5">
+            {product.nutrition.calories} kcal • {product.nutrition.protein}g protein
+          </p>
+        </div>
+        <div className="flex items-center justify-between mt-2 pt-1">
           <span className="text-sm font-bold text-green-600">₹{basePrice}</span>
-          <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-green-600 text-white text-sm font-bold">
-            +
-          </span>
+          <span className="text-xs font-bold text-green-600">View →</span>
         </div>
       </div>
     </button>

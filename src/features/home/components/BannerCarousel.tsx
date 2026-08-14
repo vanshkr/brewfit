@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router';
 import { cn } from '@/shared/utils/cn';
 import type { Banner } from '@/shared/types';
 
@@ -11,26 +12,26 @@ export function BannerCarousel({ banners }: BannerCarouselProps) {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
+  const navigate = useNavigate();
 
-  const startAutoPlay = useCallback(() => {
+  const startAutoPlay = () => {
+    if (banners.length <= 1) return;
     intervalRef.current = setInterval(() => {
       setCurrent((prev) => (prev + 1) % banners.length);
     }, 4000);
-  }, [banners.length]);
+  };
 
-  const stopAutoPlay = useCallback(() => {
+  const stopAutoPlay = () => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
     }
-  }, []);
+  };
 
   useEffect(() => {
-    if (banners.length > 1) {
-      startAutoPlay();
-    }
+    startAutoPlay();
     return stopAutoPlay;
-  }, [banners.length, startAutoPlay, stopAutoPlay]);
+  }, [banners.length]);
 
   const goTo = (index: number) => {
     setCurrent(index);
@@ -84,14 +85,16 @@ export function BannerCarousel({ banners }: BannerCarouselProps) {
           >
             <h3 className="text-lg font-bold text-gray-800">{banner.title}</h3>
             <p className="text-sm text-gray-600 mt-1">{banner.subtitle}</p>
-            <button className="mt-3 px-4 py-1.5 bg-green-600 text-white text-xs font-semibold rounded-full w-fit hover:bg-green-700 transition-colors">
+            <button
+              onClick={() => navigate(banner.link ?? '/category/all')}
+              className="mt-3 px-4 py-1.5 bg-green-600 text-white text-xs font-semibold rounded-full w-fit hover:bg-green-700 active:scale-95 transition-all"
+            >
               Order Now
             </button>
           </div>
         ))}
       </div>
 
-      {/* Dot indicators */}
       {banners.length > 1 && (
         <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5">
           {banners.map((_, index) => (
